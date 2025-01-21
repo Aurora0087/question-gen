@@ -1,0 +1,35 @@
+html.dark {
+  --bg-main: #131313;
+  --bg-main-opacity: 12, 12, 13;
+  --bg-secondary: #282828;
+  --bg-card: #47fdb4;
+  --bg-card-hover: #343434;
+  --bg-dot: hsla(156, 98%, 64%, 0.5);
+
+  --font-primary: #ededed;
+  --font-muted: #808080;
+  --font-inverted: #282828;
+
+  --border-primary: #2E2E2E;
+  --border-primary-hover: #3E3E3E;
+  --border-muted: #1C1822;
+  --font-placeholder: #707070;
+}
+
+html.light {
+  --bg-main: #ffffff;
+  --bg-main-opacity: 255, 255, 255;
+  --bg-secondary: #f5f5f5;
+  --bg-card: #606060;
+  --bg-card-hover: #d0eeee;
+  --bg-dot: hsla(0, 0%, 15%, 0.5);
+
+  --font-primary: #1a1a1a;
+  --font-muted: #606060;
+  --font-inverted: #ffffff;
+
+  --border-primary: #d0d0d0;
+  --border-primary-hover: #c0c0c0;
+  --border-muted: #e5e5e5;
+  --font-placeholder: #a0a0a0;
+}

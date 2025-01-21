@@ -1,0 +1,21 @@
+{
+    "title": "The Power of Our Service",
+    "subtitle": "Our AI Question Generator transforms any PDF document or topic into tailored questions and answers for testing and studying, making it an invaluable tool for both teachers and students.",
+    "points": [
+        {
+            "icon": "heroicons:cog",
+            "title": "User-Friendly",
+            "description": "Effortlessly create questions with a simple and intuitive interface designed for everyone."
+        },
+        {
+            "icon": "heroicons:check",
+            "title": "Reliable",
+            "description": "Count on accurate and well-structured questions to meet your academic or teaching needs."
+        },
+        {
+            "icon": "heroicons:lock-closed",
+            "title": "Secure",
+            "description": "Your data is handled with the utmost care and protected by industry-standard security measures."
+        }
+    ]
+}

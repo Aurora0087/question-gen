@@ -1,0 +1,32 @@
+{
+  "title": "FAQ",
+  "subtitle": "Frequently Asked Questions",
+  "faqQuestions": [
+    {
+      "title": "Services",
+      "questions": [
+        {
+          "title": "What services do you provide?",
+          "answer": "We currently offer the ability to generate mcq questions from a given topic or extract questions from a PDF."
+        },
+        {
+          "title": "Do I need an account to use the Question Generator?",
+          "answer": "Yes, you need to register an account to access the Question Generator."
+        }
+      ]
+    },
+    {
+      "title": "Pricing",
+      "questions": [
+        {
+          "title": "Dose we get free Token?",
+          "answer": "yes after registering you will get 10 free token."
+        },
+        {
+          "title": "What is the cost of generating a question paper?",
+          "answer": "Generating questions from a topic costs 1 token, while generating questions from a PDF costs 5 tokens."
+        }
+      ]
+    }
+  ]
+}
