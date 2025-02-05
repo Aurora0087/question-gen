@@ -16,6 +16,7 @@ const isSreaching = ref(false);
 
 const { user, logout } = useAuth();
 const { listOfMcqPaper, hasMoreMcqs, getMcqs } = useMcqList();
+
 const loadMoreMcqObserverMobile = ref(null);
 const loadMoreMcqObserverPc = ref(null);
 
@@ -35,7 +36,7 @@ useIntersectionObserver(loadMoreMcqObserverPc, ([enter], observerElement) => {
 });
 
 onMounted(async () => {
-  if (listOfMcqPaper.value.length === 0) {
+
     await getMcqs().catch((err) => {
       toaster.add({
         title: err.data.message,
@@ -43,7 +44,6 @@ onMounted(async () => {
         icon: "material-symbols:error-circle-rounded-outline-sharp",
       });
     });
-  }
 
   const savedSideBarExpand = String(
     window.localStorage.getItem("ExpandSideBar")
@@ -65,7 +65,7 @@ function expandOnPc() {
 async function logOutUser() {
   try {
     await logout();
-    router.push("/");
+    window.location.href = "/";
   } catch (error) {
     console.log(error);
   }
