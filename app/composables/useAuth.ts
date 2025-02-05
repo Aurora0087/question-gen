@@ -80,6 +80,14 @@ export const useAuth = () => {
         throw new Error(backEndRespose.message || 'Login Failed.');
       }
 
+      const userDetails = {
+        username: backEndRespose.data.userName,
+        userId: backEndRespose.data.uid,
+        userCredit: backEndRespose.data.userCredit,
+      };
+
+      user.value = userDetails;
+
 
       return backEndRespose;
     } catch (err) {
@@ -121,7 +129,6 @@ export const useAuth = () => {
 
   // OAuth Login Methods
   const loginWithOAuth = async () => {
-    console.log(process.env.APPWRITE_ENDPOINT);
     
     try {
       loading.value = true
