@@ -59,7 +59,7 @@ async function onSubmit(data) {
     .catch((err) => {
       toast.add({
         title: "Account creation Failed",
-        description: String(err),
+        description: String(err.data.message||'Somthing Gone Wrong.'),
         color: "red",
         icon: "material-symbols:error-circle-rounded-outline-sharp",
       });
@@ -92,7 +92,7 @@ function googleLogin() {
               >.
             </div>
           </div>
-          <!--Auth  form-->
+          <!-- Auth  form-->
           <UForm
             :schema="RegisterSchema"
             :state="formState"
@@ -119,7 +119,7 @@ function googleLogin() {
               >
                 <template #trailing>
                   <span
-                    :onclick="showPasswordToggle"
+                    @click="showPasswordToggle"
                     class="text-gray-500 dark:text-gray-400 text-xs cursor-pointer"
                   >
                     <Icon
@@ -148,7 +148,7 @@ function googleLogin() {
               >
                 <template #trailing>
                   <span
-                    :onclick="showConfirmPasswordToggle"
+                    @click="showConfirmPasswordToggle"
                     class="text-gray-500 dark:text-gray-400 text-xs cursor-pointer"
                   >
                     <Icon
@@ -181,7 +181,7 @@ function googleLogin() {
 
           <UDivider label="OR" />
 
-          <!--Googlr login-->
+          <!-- Googlr login-->
           <div>
             <UButton
               color="white"

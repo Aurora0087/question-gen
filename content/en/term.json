@@ -1,11 +1,10 @@
 {
     "termsAndConditions": {
       "title": "Terms and Conditions",
-      "effectiveDate": "2025-01-12",
       "sections": [
         {
           "title": "Introduction",
-          "content": "Welcome to our Question Generator app. By using our services, you agree to comply with and be bound by these Terms and Conditions. Please read them carefully before proceeding."
+          "content": "Welcome to our Question Generator app Qus-Ai. By using our services, you agree to comply with and be bound by these Terms and Conditions. Please read them carefully before proceeding."
         },
         {
           "title": "Account Registration",
@@ -21,7 +20,7 @@
         },
         {
           "title": "Prohibited Activities",
-          "content": "You agree not to misuse the platform, including attempting to hack, reverse-engineer, or exploit the services or content for unauthorized purposes."
+          "content": "You agree not to misuse the platform, including attempting to hack, or exploit the services or content for unauthorized purposes."
         },
         {
           "title": "Intellectual Property",
@@ -41,7 +40,7 @@
         },
         {
           "title": "Contact Us",
-          "content": "If you have any questions about these Terms and Conditions, please contact us at support@example.com."
+          "content": "If you have any questions about these Terms and Conditions, please contact us at debrajbanshi1@gmail.com."
         }
       ]
     }

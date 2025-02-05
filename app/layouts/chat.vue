@@ -1,59 +1,23 @@
 <script setup>
+
+import { profileLinks } from '~~/content/en/layouts/chat/bottomLinks';
+import { newPapersLinks } from '~~/content/en/layouts/chat/uperLinks';
+
+const { appName } = useAppConfig();
+
+
 const router = useRouter();
 const toaster = useToast();
 
 const expand = ref(false);
 const mobileExpand = ref(false);
 
+const isSreaching = ref(false);
+
 const { user, logout } = useAuth();
 const { listOfMcqPaper, hasMoreMcqs, getMcqs } = useMcqList();
 const loadMoreMcqObserverMobile = ref(null);
 const loadMoreMcqObserverPc = ref(null);
-
-const profileLinks = [
-  [
-    {
-      label: "Profile",
-      icon: "heroicons:user-circle-16-solid",
-      to: "/profile",
-    },
-  ],
-  [
-    {
-      label: "Buy More Token",
-      icon: "heroicons:shopping-cart-16-solid",
-      to: "/pricing",
-    },
-    {
-      label: "Billings",
-      icon: "heroicons:credit-card-20-solid",
-      to: "/profile/billings",
-    },
-  ],
-  [
-    {
-      label: "Help",
-      icon: "i-heroicons-question-mark-circle",
-      to: "/help",
-    },
-  ],
-];
-
-const newPapersLinks = [
-  [
-    {
-      label: "Mcq",
-      icon: "heroicons:check-circle-16-solid",
-      to: "/dashbord",
-    },
-    {
-      label: "Saq",
-      icon: "heroicons:document-text-solid",
-      badge: "Coming Soon",
-      //to: "/dashbord/saq",
-    },
-  ],
-];
 
 useIntersectionObserver(
   loadMoreMcqObserverMobile,
@@ -94,6 +58,10 @@ function toggleExpand() {
   window.localStorage.setItem("ExpandSideBar", String(expand.value));
 }
 
+function expandOnPc() {
+  expand.value = true;
+}
+
 async function logOutUser() {
   try {
     await logout();
@@ -105,7 +73,7 @@ async function logOutUser() {
 </script>
 
 <template>
-  <NuxtLoadingIndicator/>
+  <NuxtLoadingIndicator />
   <div class="min-h-screen flex">
     <div
       :aria-expanded="expand"
@@ -116,12 +84,15 @@ async function logOutUser() {
         class="fixed h-screen transition-all expand-inside overflow-y-auto overflow-hidden space-y-4 text-center px-2"
       >
         <div
-          class="h-screen relative w-full flex flex-col justify-center py-4 gap-2"
+          class="h-screen relative w-full flex flex-col justify-center py-4 gap-2 z-50"
         >
+        
           <!-- top new papers-->
-          <UPopover>
+          <UPopover
+          >
             <div
               class="rounded-xl p-2 w-full bg-white/10 flex justify-between items-center"
+              @click="expandOnPc"
             >
               <Icon name="heroicons:plus-circle-solid" class="w-8 h-8" />
               <div
@@ -142,11 +113,62 @@ async function logOutUser() {
             </div>
 
             <template #panel>
-              <div class="h-fit w-[250px] p-2">
-                <UVerticalNavigation :links="newPapersLinks" />
-              </div>
+              <div class="h-fit w-[250px] p-2 relative">
+                <UVerticalNavigation
+                  :links="newPapersLinks"
+                />
+                </div>
             </template>
           </UPopover>
+
+          <!-- search and home button-->
+          <div
+            class="rounded-xl p-2 w-full bg-white/10 flex flex-col gap-2 justify-between items-center"
+          >
+            <!-- home-->
+            <NuxtLink
+              to="/"
+              class="hover:opacity-80 flex justify-between items-center w-full"
+            >
+              <Icon name="heroicons-outline:home" class="w-8 h-8" />
+              <div
+                style="--stagger: 1"
+                data-animate
+                v-if="expand"
+                class="flex flex-col ml-2 text-left text-sm"
+              >
+                <span class="text-primary">{{ appName }}</span>
+              </div>
+              <Icon
+                style="--stagger: 1"
+                data-animate
+                v-if="expand"
+                name="heroicons:arrow-up-right-16-solid"
+                class="ml-2"
+              />
+            </NuxtLink>
+
+            <!-- search button-->
+            <div
+              @click="isSreaching = true"
+              color="gray"
+              class="px-0 cursor-pointer hover:opacity-80 flex justify-between items-center w-full"
+            >
+              <Icon
+                name="heroicons:magnifying-glass-16-solid"
+                class="w-8 h-8"
+              />
+              <div
+                style="--stagger: 1"
+                data-animate
+                v-if="expand"
+                class="flex flex-col ml-2 text-left text-sm"
+              >
+                <span class="text-primary">Search</span>
+              </div>
+              <div></div>
+            </div>
+          </div>
 
           <!-- content-->
           <div class="flex-grow overflow-y-auto overflow-x-hidden rounded-xl">
@@ -171,6 +193,7 @@ async function logOutUser() {
           <UPopover>
             <div
               class="rounded-xl p-2 w-full bg-white/10 flex justify-between items-center"
+              @click="expandOnPc"
             >
               <ClientOnly>
                 <UAvatar :alt="user?.username || 'user'" />
@@ -211,6 +234,11 @@ async function logOutUser() {
       </div>
     </div>
 
+    <!-- search popup-->
+    <UModal v-model="isSreaching">
+      <LayoutSearchPaper />
+    </UModal>
+
     <USlideover class="grid md:hidden" v-model="mobileExpand">
       <div
         class="h-screen relative w-full flex flex-col justify-center p-4 gap-2"
@@ -243,6 +271,49 @@ async function logOutUser() {
             </div>
           </template>
         </UPopover>
+
+        <!-- search and home button-->
+        <div
+          class="rounded-xl p-2 w-full bg-white/10 flex flex-col gap-2 justify-between items-center"
+        >
+          <!-- home-->
+          <NuxtLink
+            to="/"
+            class="hover:opacity-80 flex justify-between items-center w-full"
+          >
+            <Icon name="heroicons-outline:home" class="w-8 h-8" />
+            <div
+              style="--stagger: 1"
+              data-animate
+              class="flex flex-col ml-2 text-left text-sm"
+            >
+              <span class="text-primary">{{ appName }}</span>
+            </div>
+            <Icon
+              style="--stagger: 1"
+              data-animate
+              name="heroicons:arrow-up-right-16-solid"
+              class="ml-2"
+            />
+          </NuxtLink>
+
+          <!-- search button-->
+          <UButton
+            @click="isSreaching = true"
+            color="gray"
+            class="px-0 hover:opacity-80 flex justify-between items-center w-full"
+          >
+            <Icon name="heroicons:magnifying-glass-16-solid" class="w-8 h-8" />
+            <div
+              style="--stagger: 1"
+              data-animate
+              class="flex flex-col ml-2 text-left text-sm"
+            >
+              <span class="text-primary">Search</span>
+            </div>
+            <div></div>
+          </UButton>
+        </div>
 
         <!-- content-->
         <div class="flex-grow overflow-y-auto overflow-x-hidden rounded-xl">

@@ -16,7 +16,7 @@ useSeoMeta({
 });
 
 const isLoading = ref(false);
-const isPasswordShowing =ref(false);
+const isPasswordShowing = ref(false);
 
 function showPasswordToggle() {
   isPasswordShowing.value = !isPasswordShowing.value;
@@ -104,18 +104,24 @@ function googleLogin() {
               </template>
               <UInput
                 v-model="formState.password"
-                :type="isPasswordShowing?'':'password'"
+                :type="isPasswordShowing ? 'text' : 'password'"
                 class="relative"
                 :ui="{ icon: { trailing: { pointer: '' } } }"
               >
                 <template #trailing>
                   <span
-                  :onclick="showPasswordToggle"
-                  class="text-gray-500 dark:text-gray-400 text-xs cursor-pointer"
-                    >
-                    <Icon :name="isPasswordShowing?'material-symbols:visibility-off-outline':'material-symbols:visibility-outline'" class=" w-4 h-4"/>
-                    </span
+                    @click="showPasswordToggle"
+                    class="text-gray-500 dark:text-gray-400 text-xs cursor-pointer"
                   >
+                    <Icon
+                      :name="
+                        isPasswordShowing
+                          ? 'material-symbols:visibility-off-outline'
+                          : 'material-symbols:visibility-outline'
+                      "
+                      class="w-4 h-4"
+                    />
+                  </span>
                 </template>
               </UInput>
             </UFormGroup>
@@ -158,12 +164,10 @@ function googleLogin() {
             <div
               class="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center"
             >
-              <!--[-->
               By signing in, you agree to our
               <NuxtLink to="/term" class="text-primary font-medium"
                 >Terms of Service</NuxtLink
               >.
-              <!--]-->
             </div>
           </div>
         </div>

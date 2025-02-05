@@ -1,12 +1,11 @@
 export default defineAppConfig({
-  appName: 'GQus',
-  appDescription: 'Genaret Quesanse related to a topic',
-  profilePicture: '/assets/hugo-richard-light.webp',
-  footerName: 'GQus',
-  email: 'contact@hexample.com',
+  appName: 'Qus-Ai',
+  appDescription: 'Effortlessly design personalized question papers on your chosen topics or a PDF file with the power of AI.',
+  footerName: 'Qus-Ai',
+  email: 'debrajbanshi1@gmail.com',
   twitterUsername: '@slayer_sensei',
   phone: '(+91) 0 00 00 00 00',
-  openGraphImage: 'https://canvas.hrcd.fr/social-preview.jpg',
+  openGraphImage: '',
   socials: {
     github: 'https://github.com/Aurora0087',
     twitter: 'https://twitter.com/slayer_sensei',

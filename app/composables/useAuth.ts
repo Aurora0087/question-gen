@@ -1,34 +1,34 @@
 import { OAuthProvider } from "appwrite";
 
-interface UserPropes{
-  username:string,
-  userId:string,
-  userCredit:number
+interface UserPropes {
+  username: string,
+  userId: string,
+  userCredit: number
 }
 
 export const useAuth = () => {
 
   const { $appwrite } = useNuxtApp();
 
-  const {listOfMcqPaper,pageNumber,hasMoreMcqs} = useMcqList();
+  const { listOfMcqPaper, pageNumber, hasMoreMcqs } = useMcqList();
 
-  const user = useState<UserPropes|null>('user',()=>null);
+  const user = useState<UserPropes | null>('user', () => null);
   const loading = ref(false);
-  const error = ref<String|null>(null);
+  const error = ref<String | null>(null);
 
   // register user
-  const registerUser = async({username,email,password}:{username:string,email:string,password:string})=>{
+  const registerUser = async ({ username, email, password }: { username: string, email: string, password: string }) => {
     try {
       loading.value = true;
       error.value = null;
-      
+
       const response = await fetch(`/backendApi/api/v1/users/register`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          credentials: 'include', 
+          credentials: 'include',
           body: JSON.stringify({
             username,
             email,
@@ -37,13 +37,13 @@ export const useAuth = () => {
         }
       );
 
-      const backEndRespose =  await response.json();
-      
+      const backEndRespose = await response.json();
+
       if (!response.ok) {
-        throw new Error(backEndRespose.message||'Creating Account Failed try after some time.');
+        throw new Error(backEndRespose.message || 'Creating Account Failed try after some time.');
       }
 
-      
+
       return backEndRespose;
     } catch (err) {
       error.value = String(err)
@@ -55,18 +55,18 @@ export const useAuth = () => {
   }
 
   // login user
-  const login = async({email,password}:{email:string,password:string})=>{
+  const login = async ({ email, password }: { email: string, password: string }) => {
     try {
       loading.value = true;
       error.value = null;
-      
+
       const response = await fetch(`/backendApi/api/v1/users/login`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          credentials: 'include', 
+          credentials: 'include',
           body: JSON.stringify({
             email,
             password
@@ -74,13 +74,13 @@ export const useAuth = () => {
         }
       );
 
-      const backEndRespose =  await response.json();
-      
+      const backEndRespose = await response.json();
+
       if (!response.ok) {
-        throw new Error(backEndRespose.message||'Login Failed.');
+        throw new Error(backEndRespose.message || 'Login Failed.');
       }
 
-      
+
       return backEndRespose;
     } catch (err) {
       error.value = String(err)
@@ -92,35 +92,37 @@ export const useAuth = () => {
   }
 
   // LogOut user
-  const logout = async ()=>{
+  const logout = async () => {
     loading.value = true;
-      error.value = null;
+    error.value = null;
 
-      const response = await fetch(`/backendApi/api/v1/users/logout`,
-        {
-          credentials: 'include'
-        }
-      );
-
-      const backEndRespose =  await response.json();
-      
-      if (!response.ok) {
-        throw new Error(backEndRespose.message||'Try to Login.');
+    const response = await fetch(`/backendApi/api/v1/users/logout`,
+      {
+        credentials: 'include'
       }
+    );
 
-      user.value=null;
+    const backEndRespose = await response.json();
 
-      listOfMcqPaper.value = [];
-      pageNumber.value = 1;
-      hasMoreMcqs.value = true;
+    if (!response.ok) {
+      throw new Error(backEndRespose.message || 'Try to Login.');
+    }
 
-      $appwrite.account.deleteSessions();
-      
-      return backEndRespose;
+    user.value = null;
+
+    listOfMcqPaper.value = [];
+    pageNumber.value = 1;
+    hasMoreMcqs.value = true;
+
+    $appwrite.account.deleteSessions();
+
+    return backEndRespose;
   }
 
   // OAuth Login Methods
   const loginWithOAuth = async () => {
+    console.log(process.env.APPWRITE_ENDPOINT);
+    
     try {
       loading.value = true
       error.value = null
@@ -167,7 +169,7 @@ export const useAuth = () => {
           headers: {
             'Content-Type': 'application/json'
           },
-          credentials: 'include', 
+          credentials: 'include',
           body: JSON.stringify({
             appwriteUserId: currentUser.$id,
             provider: oauthSession.provider,
@@ -181,15 +183,15 @@ export const useAuth = () => {
         throw new Error('Backend verification failed');
       }
 
-      const backEndRespose =  await response.json();
+      const backEndRespose = await response.json();
 
-      const userDetails= {
-        username:backEndRespose.data.userName,
-        userId:backEndRespose.data.uid,
-        userCredit:backEndRespose.data.userCredit,
+      const userDetails = {
+        username: backEndRespose.data.userName,
+        userId: backEndRespose.data.uid,
+        userCredit: backEndRespose.data.userCredit,
       };
-      
-      user.value=userDetails;
+
+      user.value = userDetails;
 
       return user.value;
     } catch (err) {
@@ -202,7 +204,7 @@ export const useAuth = () => {
   };
 
   // refesh Tokenes
-  const refeshToken = async ()=>{
+  const refeshToken = async () => {
     try {
       loading.value = true;
       error.value = null;
@@ -217,24 +219,24 @@ export const useAuth = () => {
         }
       );
 
-      const backEndRespose =  await response.json();
-      
+      const backEndRespose = await response.json();
 
-      const userDetails= {
-        username:backEndRespose.data.userName,
-        userId:backEndRespose.data.uid,
-        userCredit:backEndRespose.data.userCredit||0,
+
+      const userDetails = {
+        username: backEndRespose.data.userName,
+        userId: backEndRespose.data.uid,
+        userCredit: backEndRespose.data.userCredit || 0,
       };
 
       user.value = userDetails;
-      
+
       return backEndRespose;
     } catch (err) {
       error.value = String(err);
       user.value = null;
       throw err;
-    } finally{
-      loading.value=false;
+    } finally {
+      loading.value = false;
     }
   }
 

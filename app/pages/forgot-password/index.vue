@@ -1,6 +1,5 @@
 <script setup>
-
-import { forgotPasswordSchema } from '~/schemas/ForgotPasswordSchema';
+import { forgotPasswordSchema } from "~/schemas/ForgotPasswordSchema";
 
 definePageMeta({
   layout: "auth",
@@ -16,17 +15,43 @@ const formState = reactive({
 
 const isLoading = ref(false);
 
-function onSubmit(data) {
+const toast = useToast();
+
+async function onSubmit(data) {
   isLoading.value = true;
-  console.log("Submitted", data);
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 2000);
+  await $fetch(`/backendApi/api/v1/users/email/forgotPassword`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: {
+      email: data.data.email,
+    },
+  })
+    .then(() => {
+      toast.add({
+        title: "Mail send",
+        color: "primary",
+        icon: "heroicons:envelope-solid",
+      });
+    })
+    .catch((err) => {
+      toast.add({
+        title: "Error",
+        description: String(err.data.message||'Somthing Gone Wrong.'),
+        color: "red",
+        icon: "material-symbols:error-circle-rounded-outline-sharp",
+      });
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
 }
 </script>
 
 <template>
-    <NuxtLayout>
+  <NuxtLayout>
     <div
       class="rounded-xl divide-y divide-gray-200 dark:divide-gray-800 ring-1 ring-gray-200 dark:ring-gray-800 shadow max-w-sm w-full bg-white/70 dark:bg-white/5 backdrop-blur"
     >
@@ -50,11 +75,12 @@ function onSubmit(data) {
             @submit="onSubmit"
             class="space-y-6"
           >
-            <UFormGroup 
-            label="Your Register Email" 
-            name="email"
-            description="We will send you a email with link to change your password."
-            required>
+            <UFormGroup
+              label="Your Register Email"
+              name="email"
+              description="We will send you a email with link to change your password."
+              required
+            >
               <UInput
                 v-model="formState.email"
                 placeholder="youremail@mail.com"
@@ -66,7 +92,7 @@ function onSubmit(data) {
               type="submit"
               class="w-full rounded-full flex justify-center items-center py-2 px-3"
             >
-              <spam v-if="!isLoading">Send Mail</spam>
+              <p v-if="!isLoading">Send Mail</p>
               <Icon
                 v-if="isLoading"
                 class="h-5 w-5 animate-spin"

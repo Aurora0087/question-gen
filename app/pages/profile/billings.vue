@@ -25,9 +25,7 @@ const viewBillIndex = ref(0);
       <DotPattern
         class="absolute inset-0 -z-10 size-full fill-[--bg-dot] [mask-image:radial-gradient(white,transparent_85%)]"
       />
-      <UButton @click="router.back()" class="p-2 rounded-full">
-        <Icon name="heroicons:chevron-left" class="w-6 h-6" />
-      </UButton>
+      <BackButton/>
       <div v-if="res.data.value.data.length > 0" class=" grid md:grid-cols-[1fr_1.61fr]">
         <div class="p-4 space-y-4 border-b md:border-b-0 md:border-r">
             <p>Invoice History</p>

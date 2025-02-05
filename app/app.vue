@@ -35,14 +35,13 @@ useHead({
 });
 
 useSeoMeta({
-  author: "Hugo Richard",
+  author: "Deb Rajbanshi",
   ogType: "website",
   ogTitle: appConfig.appName,
-  ogSiteName: "Canvas",
+  ogSiteName: appConfig.appName,
   ogUrl: () => runtimeConfig.public.siteUrl,
   ogLocale: () => locale.value,
   twitterTitle: appConfig.appName,
-  twitterCard: "summary_large_image",
   twitterSite: appConfig.twitterUsername,
   twitterCreator: appConfig.twitterUsername,
 });

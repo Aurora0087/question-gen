@@ -1,15 +1,13 @@
 <script setup>
-definePageMeta({
-  ssr: false,
-});
+const { appName } = useAppConfig();
 
 useSeoMeta({
-  title: "Checkout",
+  title: `Checkout-${appName}`,
 });
 
 const params = useUrlSearchParams("history");
-const router = useRouter();
 const toaster = useToast();
+const router = useRouter();
 
 const ORDER_PACKAGES_LIST = [
   {
@@ -33,6 +31,7 @@ const packageAmount = ref(1);
 const isLoading = ref(false);
 
 if (
+  isNaN(Number(params.pack)) ||
   Number(params.pack) < 0 ||
   Number(params.pack) > ORDER_PACKAGES_LIST.length - 1
 ) {
@@ -78,17 +77,38 @@ function completeRazorpayPayment(orderId, amount, currency) {
     key: process.env.RAZORPAY_API_KEY_ID,
     amount,
     currency,
-    name: "NONE COP",
+    name: appName,
     description: "Test Transaction",
     order_id: orderId, // This is the order_id created in the backend
-    callback_url: "http://localhost:3000/dashbord", // Your success URL
+    callback_url: "/dashbord", // success URL
     theme: {
       color: "#47fdb4",
+    },
+    handler: function () {
+      // after payment success
+      toaster.add({
+        title: "Token added succesFullly.",
+        color: "primary",
+        icon: "i-heroicons-check-badge",
+      });
+
+      window.location.href = "/dashbord";
     },
   };
 
   const rzp = new Razorpay(options);
   rzp.open();
+
+  rzp.on("payment.failed", function (response) {
+    // after payment failed
+    toaster.add({ title: "Error code", description: response.error.code });
+    toaster.add({
+      title: "Error description",
+      description: response.error.description,
+    });
+    toaster.add({ description: response.error.source });
+    toaster.add({ description: response.error.reason });
+  });
 }
 
 // creating order from backend
@@ -114,7 +134,7 @@ async function razorpayOrder() {
         method: "POST",
         body: {
           orderedPackage: Number(params.pack),
-          orderedPackageAmount: packageAmount.value || 1,
+          orderedPackageAmount: Number(packageAmount.value) || 1,
         },
         headers: {
           "Content-Type": "application/json",
@@ -122,8 +142,6 @@ async function razorpayOrder() {
         credentials: "include",
       }
     );
-
-    console.log(createOrderRes);
 
     if (createOrderRes.success) {
       completeRazorpayPayment(
@@ -133,6 +151,10 @@ async function razorpayOrder() {
       );
     }
   } catch (error) {
+    toaster.add({
+      title: "Error",
+      description: String(error.data.message || "Can't create Razorpay Order."),
+    });
     console.log(error);
   } finally {
     isLoading.value = false;
@@ -149,9 +171,11 @@ async function razorpayOrder() {
         <p>Total price</p>
         <h3 class="text-5xl font-bold">
           ₹{{
-            packageAmount *
-            ORDER_PACKAGES_LIST[Number(params.pack)].perTokenPrice *
-            ORDER_PACKAGES_LIST[Number(params.pack)].totalToken
+            ORDER_PACKAGES_LIST[Number(params.pack)]
+              ? packageAmount *
+                ORDER_PACKAGES_LIST[Number(params.pack)].perTokenPrice *
+                ORDER_PACKAGES_LIST[Number(params.pack)].totalToken
+              : 0
           }}
         </h3>
         <div
@@ -190,6 +214,22 @@ async function razorpayOrder() {
             <Icon name="heroicons:plus-small" class="w-6 h-6" />
           </UButton>
         </div>
+        <div
+          class="text-primary border-b-2 md:border-transparent pb-5 text-center p-2 w-full flex flex-col gap-4"
+        >
+          <div
+            class="bg-white h-fit text-black text-center text-xl rounded-xl p-2 w-full"
+          >
+          <Icon name="heroicons:credit-card-20-solid" class="w-6 h-6"/>
+            <p>Choose Payment Gateway.</p>
+          </div>
+          <div
+            class="bg-gradient-to-r cursor-pointer from-teal-400 to-yellow-200 text-black flex gap-4 justify-center items-center text-center rounded-xl p-2 w-full hover:opacity-90"
+          >
+            <Icon name="simple-icons:razorpay" class="w-6 h-6" />
+            <p>Razorpay</p>
+          </div>
+        </div>
       </div>
       <div class="order-3"></div>
       <div class="grid gap-5 order-4">
@@ -203,10 +243,19 @@ async function razorpayOrder() {
             priority for us.
           </p>
         </div>
+        <div
+          class="bg-gradient-to-r from-teal-400 to-yellow-200 text-black space-y-2 text-center rounded-xl p-10 w-full"
+        >
+          <Icon name="heroicons:sparkles" class="w-6 h-6" />
+          <p>
+            The payment gateway is currently in test mode, so no actual charges
+            will be deducted from your account.
+          </p>
+        </div>
         <UButton
           :loading="isLoading"
           @click="razorpayOrder"
-          class="w-full flex justify-center items-center rounded-xl"
+          class="w-full flex justify-center items-center rounded-xl bg-[--bg-card]"
           size="lg"
           label="Continue"
           icon="heroicons:chevron-right"

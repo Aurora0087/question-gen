@@ -1,5 +1,4 @@
 <script setup>
-
 useSeoMeta({
   title: "Proceing Login...",
 });
@@ -23,8 +22,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class=" w-screen h-screen grid place-content-center text-center text-primary">
-    <p v-if="loading">Processing login...</p>
-    <p v-if="error">{{ error.message||'Error' }}</p>
-  </div>
+  <NuxtLayout>
+    <div
+      class="w-screen h-screen grid place-content-center text-center text-primary"
+    >
+      <p v-if="loading">Processing login...</p>
+      <p v-if="error">{{ error.message || "Error" }}</p>
+    </div>
+  </NuxtLayout>
 </template> 

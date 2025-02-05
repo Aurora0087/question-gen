@@ -76,7 +76,6 @@ const prices = [
           style="--stagger: 1"
           data-animate
           class="text-center flex flex-col items-center">
-            <!---->
             <h1
               class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl"
             >
@@ -87,7 +86,6 @@ const prices = [
               and players. Get the right plan that suits you.
             </div>
           </div>
-          <!---->
         </div>
       </div>
 

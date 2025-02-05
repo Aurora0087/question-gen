@@ -1,3 +1,4 @@
+
 export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
@@ -7,44 +8,39 @@ export default defineNuxtConfig({
     head: {
       viewport: 'width=device-width, initial-scale=1',
       charset: 'utf-8',
-      script: [
-        {
-          //'src': 'https://analytics.hrcd.fr/js/script.js',
-          'defer': true,
-          'data-domain': 'canvas.hrcd.fr',
-        },
-      ],
+      script: [],
     },
-    
+
   },
 
   routeRules: {
     '/': { isr: true, prerender: true },
-    '/backendApi/**': 
+    '/dashbord/checkout':{ssr: false},
+    '/backendApi/**':
     {
-      proxy: { to: "http://localhost:8002/**" },
+      proxy: { to: `${process.env.BACKEND_URL || 'http://localhost:8002'}/**` },
     },
   },
 
   site: {
-    url: process.env.NUXT_SITE_URL || 'https://canvas.hrcd.fr',
+    url: process.env.NUXT_SITE_URL,
     identity: {
       type: 'Person',
     },
-    twitter: '@HugoRCD__',
+    twitter: '@slayer_sensei',
   },
 
   css: ['~/assets/style/main.css'],
 
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
-      available: process.env.NUXT_PUBLIC_AVAILABLE,
-      meetingLink: process.env.NUXT_PUBLIC_MEETING_LINK,
+      siteUrl: process.env.NUXT_SITE_URL,
+      appwrite: {
+        endPoint: process.env.APPWRITE_ENDPOINT,
+        projectId: process.env.APPWRITE_PROJECT_ID,
+      },
     },
-    private: {
-      resendApiKey: process.env.NUXT_PRIVATE_RESEND_API_KEY,
-    },
+
   },
 
   colorMode: {
@@ -96,16 +92,22 @@ export default defineNuxtConfig({
       redirectOn: 'root',
     },
     baseUrl: '/',
-    locales: ['en', 'fr'],
+    locales: ['en'],
     defaultLocale: 'en',
     vueI18n: '~/i18n.config.ts',
   },
 
   nitro: {
     prerender: {
-      crawlLinks: true,
-      routes: ['/sitemap.xml', '/', '/writing', '/works', '/about', '/contact'],
+      crawlLinks: false,
+      routes: ['/','/help','/pricing','/login','/signup','/forgot-password'],
     },
+    devProxy:{
+      '/backendApi/':{
+        target:process.env.BACKEND_URL,
+        changeOrigin:true,
+      }
+    }
   },
 
   content: {
@@ -123,7 +125,7 @@ export default defineNuxtConfig({
     markdown: {
       anchorLinks: false,
     },
-    locales: ['en', 'fr'],
+    locales: ['en'],
     defaultLocale: 'en',
   },
 
@@ -131,5 +133,5 @@ export default defineNuxtConfig({
     autoImportPath: './assets/logo/',
   },
 
-  compatibilityDate: '2024-07-31',
+  compatibilityDate: '2022-01-30',
 })

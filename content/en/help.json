@@ -1,0 +1,35 @@
+{
+    "helps": {
+        "Introduction": "Welcome to the Help page! Here you’ll find answers to common questions and guidance on using the AI Question Generator. If you need further assistance, feel free to reach out to us.",
+        "HowToUseApp": {
+            "RegisterAccount": "To register, click on the 'Sign Up' button, fill in your details, verify your email, and start using the app.",
+            "HowToGenerateQuestionPaper": [
+                "Choose between 'Generate from Topic' or 'Generate from PDF' by toggling Use PDF.",
+                "Enter your topic or upload the PDF.",
+                "Specify the number of questions you want, and hit 'Make MCQ Paper'!"
+            ]
+        },
+        "PricingAndTokens": "Our pricing model operates on a token-based system: Generating questions from a topic requires 1 token, while extracting questions from a PDF costs 5 tokens. You can purchase tokens through one of our pricing plans: Basic (1 Token for ₹15), Standard (10 Tokens for ₹12 each), or Premium (20 Tokens for ₹10 each). Tokens are non-refundable and can be used at any time.",
+        "FAQ": [
+            {
+                "title": "Do I need an account to use the app?",
+                "answer": "Yes, you need to register an account to access the Question Generator features."
+            },
+            {
+                "title": "What file formats are supported for generate papers?",
+                "answer": "Currently, only PDF files are supported."
+            },
+            {
+                "title": "Can I edit the generated questions?",
+                "answer": "No, you can't edit the generated questions but you can edit Topic title of a Paper."
+            }
+        ],
+        "CommonIssuesSolutions": [
+            "If you unable to Generate any paper, please ensure your Email verifyed or not, after registering we send a mail to verify you Email.",
+            "If your PDF isn't uploading, ensure it's under 3MB and in a supported format (PDF only).",
+            "If questions are not generating, check your internet connection and try again.",
+            "If you run out of tokens, purchase more through the pricing plans."
+        ],
+        "ContactSupport": "Can’t find what you’re looking for? Reach out to our support team at debrajbanshi1@gmail.com."
+    }
+}

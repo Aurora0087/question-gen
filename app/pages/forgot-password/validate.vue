@@ -19,13 +19,45 @@ const formState = reactive({
 
 const isLoading = ref(false);
 
-function onSubmit(data) {
+const router = useRouter();
+const toast = useToast();
+
+async function onSubmit(data) {
   isLoading.value = true;
-  console.log("Submitted : ", data);
-  console.log("param : ", params);
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 2000);
+  await $fetch(`/backendApi/api/v1/users/forgotPassword`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: {
+      newPassword: data.data.password,
+      uId:params.uId||null,
+      token:params.token||null,
+    },
+  })
+    .then(() => {
+      toast.add({
+        title: "Password changed.",
+        color: "primary",
+        icon: "i-heroicons-check-badge",
+      });
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 1000);
+    })
+    .catch((err) => {
+      toast.add({
+        title: "Error",
+        description: String(err.data.message||'Somthing Gone Wrong.'),
+        color: "red",
+        icon: "material-symbols:error-circle-rounded-outline-sharp",
+      });
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
 }
 </script>
 

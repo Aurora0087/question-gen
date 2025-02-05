@@ -33,8 +33,6 @@ if (creditHistory.error.value) {
   });
 }
 
-console.log(creditHistory.data.value);
-
 hasMore.value = creditHistory.data.value.data.hasNextPage;
 historys.value = creditHistory.data.value.data.docs;
 
@@ -55,7 +53,11 @@ async function getMoreHistory() {
       }
     );
 
-    historys.value.push(res.data.docs);
+    console.log(res.data);
+    
+
+    historys.value.push(...res.data.docs);
+    pageNumber.value+=1;
     hasMore.value = res.data.hasNextPage;
   } catch (err) {
     console.log(err.data);
@@ -86,9 +88,7 @@ onMounted(() => {
       <DotPattern
         class="absolute inset-0 -z-10 size-full fill-[--bg-dot] [mask-image:radial-gradient(white,transparent_85%)]"
       />
-      <UButton @click="router.back()" class="p-2 rounded-full aspect-square h-fit">
-        <Icon name="heroicons:chevron-left" class="w-6 h-6" />
-      </UButton>
+      <BackButton/>
       <div v-if="historys.length > 0" class="space-y-12">
         <div class="text-3xl md:text-5xl font-bold text-center">
           <p>Token History</p>

@@ -41,11 +41,7 @@ async function verifyEmail() {
       />
       <div v-if="currentUserRes.data.value" class="p-8 w-full space-y-4">
         <div class="flex gap-4">
-          <UButton
-            @click="router.back()"
-            icon="heroicons:chevron-left"
-            class="p-2 rounded-full aspect-square h-fit"
-          />
+          <BackButton/>
           <h3 class="text-xl font-bold">Manage profile and preferences</h3>
         </div>
 

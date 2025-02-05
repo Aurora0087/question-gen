@@ -1,4 +1,6 @@
 <script setup>
+import { EditMcqPaperSchema } from "~/schemas/EditMcqPaperSchema";
+
 definePageMeta({
   layout: "chat",
 });
@@ -31,6 +33,7 @@ const error = ref("");
 
 const isScoreModelOpen = ref(false);
 const isDeleteing = ref(false);
+const isEditing = ref(false);
 const reportResponse = ref(null);
 
 function addAndToggleAns(index, ans) {
@@ -150,13 +153,51 @@ async function deleteMcq() {
   }
 }
 
+const editMcwFormState = reactive({
+  newTitle: "",
+});
+
+async function editPaperSubmit(data) {
+  isLoading.value = true;
+  await $fetch("/backendApi/api/v1/chats/mcq/edit", {
+    method: "POST",
+    body: {
+      mcqId: String(response.data.value.data.mcq._id),
+      newTitle: String(data.data.newTitle),
+    },
+    credentials: "include",
+  })
+    .then((res) => {
+      toast.add({
+        title: "Edit succesFull",
+        color: "primary",
+        icon: "i-heroicons-check-badge",
+      });
+      response.data.value.data.mcq.topic = data.data.newTitle;
+      listOfMcqPaper.value = listOfMcqPaper.value.map((item)=>
+        item.to === `/dashbord/mcq/${response.data.value.data.mcq._id}` ? {...item,label:data.data.newTitle}:item
+      )
+    })
+    .catch((err) => {
+      toast.add({
+        title: "Error",
+        description: String(err.data.message),
+        color: "red",
+        icon: "material-symbols:error-circle-rounded-outline-sharp",
+      });
+    })
+    .finally(() => {
+      isLoading.value = false;
+    });
+}
+
 useSeoMeta({
   title: response.data.value.data.mcq.topic || "Finding topic title...",
 });
 </script>
 
 <template>
-  <NuxtLoadingIndicator/>
+  <NuxtLoadingIndicator />
   <NuxtLayout>
     <div>
       <LayoutScrollToTop />
@@ -200,9 +241,10 @@ useSeoMeta({
         >
       </div>
       <div
-      style="--stagger: 2"
-      data-animate
-      class="w-full flex gap-4 p-4 text-center justify-end">
+        style="--stagger: 2"
+        data-animate
+        class="w-full flex gap-4 p-4 text-center justify-end"
+      >
         <NuxtLink
           :to="route.fullPath + '/ans'"
           class="flex items-center rounded-xl bg-[--bg-card] text-black font-bold hover:opacity-90 focus:opacity-90 p-1 px-4"
@@ -210,11 +252,69 @@ useSeoMeta({
           <Icon name="heroicons:document-text" class="w-6 h-6" />
           <span class="ml-2">Given Answer Papers</span>
         </NuxtLink>
+
+        <!-- edit mcq -->
+
+        <UButton
+          v-if="response.data.value.data.isOwner"
+          @click="() => (isEditing = true)"
+          class="flex items-center rounded-xl bg-[--bg-card] text-black font-bold hover:opacity-90 focus:opacity-90 p-1 px-4"
+        >
+          <Icon name="heroicons:pencil" class="w-6 h-6" />
+          <span class="ml-2">Edit Paper</span>
+        </UButton>
+
+        <!-- paper edit form-->
+        <UModal v-model="isEditing" class="rounded-xl">
+          <div class="p-8 space-y-4">
+            <p class="text-xl font-bold">Are you absolutely sure?</p>
+            <p class="text-white/70">
+              This action cannot be undone. This will permanently edit your
+              Question Paper.
+            </p>
+
+            <UForm
+              :schema="EditMcqPaperSchema"
+              :state="editMcwFormState"
+              @submit="editPaperSubmit"
+              class="space-y-6"
+            >
+              <UFormGroup label="New Title" name="newTitle" required>
+                <UInput
+                  v-model="editMcwFormState.newTitle"
+                  placeholder="new title"
+                />
+              </UFormGroup>
+
+              <UButton
+                :disabled="isLoading"
+                type="submit"
+                class="w-full flex justify-center items-center py-2 px-3"
+              >
+                <p>Edit</p>
+                <Icon
+                  v-if="isLoading"
+                  class="h-5 w-5 animate-spin"
+                  name="mingcute:loading-fill"
+                />
+                <Icon v-else class="h-5 w-5" name="ic:baseline-arrow-forward" />
+              </UButton>
+              <UButton
+                @click="() => (isEditing = false)"
+                color="gray"
+                label="Cancel"
+                class="w-full flex justify-center items-center py-2 px-3"
+              />
+            </UForm>
+          </div>
+        </UModal>
+
+        <!-- delete mcq -->
         <UButton
           v-if="response.data.value.data.isOwner"
           @click="() => (isDeleteing = true)"
           color="red"
-          class="flex items-center rounded-xl bg-[--bg-card] text-black font-bold hover:opacity-90 focus:opacity-90 p-1 px-4"
+          class="flex items-center rounded-xl text-black font-bold hover:opacity-90 focus:opacity-90 p-1 px-4"
         >
           <Icon name="heroicons:trash-16-solid" class="w-6 h-6" />
           <span class="ml-2">Delete Paper</span>

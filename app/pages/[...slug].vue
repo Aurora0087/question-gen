@@ -1,5 +1,4 @@
 <script setup >
-import { Toaster } from 'vue-sonner';
 
 const route = useRoute();
 const { data: page } = await useAsyncData(`${route.path}`, () => queryContent(route.path).findOne());
@@ -21,8 +20,8 @@ useHead({
 
 useSeoMeta({
   description: () => t('global.app_description'),
-  author: 'Hugo Richard',
-  ogImage: 'https://canvas.hrcd.fr/social-preview.jpg',
+  author: 'Deb Rajbanshi',
+  ogImage: 'https://https://Qus-Ai.createwithdeb.com/social-preview.jpg',
   ogType: 'website',
   ogTitle: appConfig.appName,
   ogDescription: () => t('global.app_description'),
@@ -68,7 +67,6 @@ defineShortcuts({
             <ContentRenderer :value="data" />
           </ContentQuery>
         </NuxtLayout>
-        <Toaster close-button />
         <DotPattern class="absolute inset-0 -z-10 size-full fill-[--bg-dot] [mask-image:radial-gradient(white,transparent_85%)]" />
       </Body>
     </Html>

@@ -13,8 +13,6 @@ const { data } = await useAsyncData(
     watch: [locale],
   }
 );
-
-console.log(data.value.termsAndConditions);
 </script>
 
 <template>

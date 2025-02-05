@@ -185,7 +185,7 @@ async function onPDFSubmit(event) {
                 <UForm
                   :validate="validateTopic"
                   :state="topicState"
-                  class="space-y-4"
+                  class="grid gap-4"
                   @submit="onTopicSubmit"
                 >
                   <UFormGroup label="MCQ Topic" name="topic" required>
@@ -213,7 +213,7 @@ async function onPDFSubmit(event) {
                   <UButton
                     :loading="isLoading"
                     type="submit"
-                    class="w-full rounded-full text-center flex justify-center items-center"
+                    class="w-full mt-8 rounded-full text-center flex justify-center items-center"
                   >
                     <span>Make MCQ Paper</span>
                     <Icon
@@ -229,7 +229,7 @@ async function onPDFSubmit(event) {
                 <UForm
                   :validate="validatePDFTopic"
                   :state="topicPDFState"
-                  class="space-y-4"
+                  class="space-y-8"
                   @submit="onPDFSubmit"
                 >
                   <UFormGroup label="PDF file" name="topic" required>

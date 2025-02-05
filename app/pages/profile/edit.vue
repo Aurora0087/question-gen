@@ -1,4 +1,5 @@
 <script setup>
+import BackButton from "~/components/BackButton.vue";
 import { ChangePasswordSchema } from "~/schemas/ChangePasswordSchema";
 
 useSeoMeta({
@@ -103,11 +104,7 @@ async function changeUsernameOnsubmit(data) {
       />
       <div v-if="currentUserRes.data.value" class="p-8 w-full space-y-4">
         <div class="flex gap-4">
-          <UButton
-            @click="router.back()"
-            icon="heroicons:chevron-left"
-            class="p-2 rounded-full"
-          />
+          <BackButton/>
           <h3 class="text-xl font-bold">
             Change Username{{
               currentUserRes.data.value.data.user.loginType !== "GOOGLE"
