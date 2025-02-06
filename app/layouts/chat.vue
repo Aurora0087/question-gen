@@ -38,6 +38,11 @@ useIntersectionObserver(loadMoreMcqObserverPc, ([enter], observerElement) => {
 onMounted(async () => {
 
     await getMcqs().catch((err) => {
+
+      if (Number(err.data.statusCode)===401) {
+        router.push('/login');
+      }
+
       toaster.add({
         title: err.data.message,
         color: "red",
